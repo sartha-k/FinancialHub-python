@@ -1,0 +1,58 @@
+<div class="edit-wrapper">
+  <div class="edit-card">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <button type="button" class="btn btn-light back-btn" (click)="goBack()">Back</button>
+    </div>
+
+    <div class="text-center mb-4">
+      <h2 class="edit-title">Edit Savings Plan</h2>
+      <p class="edit-subtitle">Update savings plan details</p>
+    </div>
+
+    <form [formGroup]="savingsPlanForm" (ngSubmit)="updateSavingsPlan()">
+      <div class="mb-3">
+        <label class="form-label">Plan Name</label>
+        <input type="text" class="form-control" formControlName="name" placeholder="Plan Name">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('name')?.errors?.['required']">Plan Name is required</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Rate of Interest (%)</label>
+        <input type="number" class="form-control" formControlName="rateOfInterest" placeholder="Rate of Interest (%)" (wheel)="$event.preventDefault()">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('rateOfInterest')?.errors?.['required']">Rate of Interest is required</small>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('rateOfInterest')?.errors?.['min']">Rate of Interest must be greater than 0</small>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('rateOfInterest')?.errors?.['max']">Rate of Interest cannot exceed 100</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Time Frame (Years)</label>
+        <input type="number" class="form-control" formControlName="timeFrame" placeholder="Time Frame in Years" (wheel)="$event.preventDefault()">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('timeFrame')?.errors?.['required']">Time Frame is required</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Risk Level</label>
+        <select class="form-select" formControlName="riskLevel">
+          <option value="">Select Risk Level</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('riskLevel')?.errors?.['required']">Risk Level is required</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control textarea-control" formControlName="description" placeholder="Description"></textarea>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('description')?.errors?.['required']">Description is required</small>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-light w-100 edit-btn">Update Savings Plan</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

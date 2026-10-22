@@ -1,0 +1,64 @@
+<div class="create-wrapper">
+  <div class="create-card">
+
+    <div class="text-center mb-4">
+      <h2 class="create-title">Create New Savings Plan</h2>
+      <p class="create-subtitle">Create • Manage • Grow</p>
+    </div>
+
+    <form [formGroup]="savingsPlanForm" (ngSubmit)="createSavingsPlan()">
+
+      <div class="mb-3">
+        <label class="form-label">Plan Name</label>
+        <input type="text" class="form-control" placeholder="Plan Name" formControlName="name">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('name')?.errors?.['required']">*Plan Name is required</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Rate of Interest (%)</label>
+        <input type="number" class="form-control" placeholder="Rate of Interest (%)" formControlName="rateOfInterest" (wheel)="$event.preventDefault()">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('rateOfInterest')?.errors?.['required']">*Rate of Interest is required</small>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('rateOfInterest')?.errors?.['min']">*Rate of Interest must be greater than 0</small>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('rateOfInterest')?.errors?.['max']">*Rate of Interest cannot exceed 100</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Time Frame (Years)</label>
+        <input type="number" class="form-control" placeholder="Time Frame in Years" formControlName="timeFrame" (wheel)="$event.preventDefault()">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('timeFrame')?.errors?.['required']">*Time Frame is required</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Risk Level</label>
+        <div class="custom-select-wrapper" [class.open]="riskDropdownOpen" (clickOutside)="riskDropdownOpen = false">
+          <button type="button" class="custom-select-trigger" (click)="riskDropdownOpen = !riskDropdownOpen">
+            <span [class.placeholder]="!savingsPlanForm.get('riskLevel')?.value">
+              {{ savingsPlanForm.get('riskLevel')?.value || 'Select Risk Level' }}
+            </span>
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="custom-select-dropdown">
+            <div class="custom-option" (click)="selectRisk('Low')">Low</div>
+            <div class="custom-option" (click)="selectRisk('Medium')">Medium</div>
+            <div class="custom-option" (click)="selectRisk('High')">High</div>
+          </div>
+        </div>
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('riskLevel')?.errors?.['required']">*Risk Level is required</small>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <input type="text" class="form-control" placeholder="Description" formControlName="description">
+        <small class="text-danger" *ngIf="submitted && savingsPlanForm.get('description')?.errors?.['required']">*Description is required</small>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-light w-100 create-btn" [disabled]="savingsPlanForm.invalid || isSubmitting">
+          {{ isSubmitting ? 'Creating...' : 'Create Savings Plan' }}
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

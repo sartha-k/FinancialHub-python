@@ -1,0 +1,733 @@
+/* ==================== NAVBAR ==================== */
+
+.navbar {
+    min-height: 80px;
+    padding: 12px 0;
+
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+
+    background: rgba(0, 0, 0, 0.4) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+
+/* ==================== BRAND ==================== */
+
+.navbar-brand {
+    color: #ffffff !important;
+
+    font-size: 1.7rem !important;
+    font-weight: 500;
+    letter-spacing: 2px;
+
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.navbar-brand span {
+    color: #60a5fa;
+}
+
+
+/* ==================== NAVIGATION LINKS ==================== */
+
+.nav-link {
+    position: relative;
+
+    margin: 0 8px;
+    padding: 10px 4px !important;
+
+    color: #cbd5e1 !important;
+    background: transparent;
+    border: none;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link.active {
+    color: #ffffff !important;
+}
+
+/* Navigation underline — only for non-dropdown nav-links */
+.nav-link:not(.dropdown-toggle)::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 3px;
+
+    width: 0;
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        #3b82f6,
+        #8b5cf6
+    );
+
+    border-radius: 2px;
+
+    transition: width 0.3s ease;
+}
+
+.nav-link:not(.dropdown-toggle):hover::before,
+.nav-link:not(.dropdown-toggle).active::before {
+    width: 100%;
+}
+
+/* Dropdown toggle — no underline, just color change */
+button.nav-link.dropdown-toggle.active {
+    color: #ffffff !important;
+}
+
+
+/* ==================== NAVIGATION DROPDOWN ==================== */
+
+button.nav-link {
+    font-family: inherit;
+    line-height: inherit;
+    text-align: left;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dropdown-toggle::after {
+    margin-left: 4px;
+    vertical-align: middle;
+
+    transition: transform 0.2s ease;
+}
+
+.dropdown-toggle.show::after {
+    transform: rotate(180deg);
+}
+
+
+/* ==================== GENERAL DROPDOWN MENU ==================== */
+
+.dropdown-menu {
+    min-width: 210px;
+
+    margin-top: 8px !important;
+    padding: 8px;
+
+    background: rgba(15, 23, 42, 0.97);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.35),
+        0 5px 15px rgba(0, 0, 0, 0.2);
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+
+/* ==================== DROPDOWN ITEMS ==================== */
+
+.dropdown-item {
+    margin: 2px 0;
+    padding: 10px 14px;
+
+    color: #cbd5e1;
+    background: transparent;
+
+    border: none;
+    border-radius: 8px;
+
+    font-weight: 500;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: #ffffff;
+
+    background: linear-gradient(
+        90deg,
+        rgba(59, 130, 246, 0.25),
+        rgba(139, 92, 246, 0.25)
+    );
+
+    transform: translateX(3px);
+}
+
+.dropdown-item.active {
+    color: #ffffff;
+
+    background: linear-gradient(
+        90deg,
+        #3b82f6,
+        #8b5cf6
+    );
+}
+
+
+/* ==================== BUTTONS ==================== */
+
+.nav-btn {
+    min-width: 100px;
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    font-weight: 600;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
+}
+
+/* Sign-up button */
+.btn-light {
+    color: #111827;
+    background: #ffffff;
+    border: none;
+}
+
+.btn-light:hover,
+.btn-light:focus {
+    color: #111827;
+    background: #f8fafc;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(255, 255, 255, 0.2);
+}
+
+
+/* ==================== MOBILE TOGGLER ==================== */
+
+.navbar-toggler {
+    padding: 7px 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+
+    box-shadow: none !important;
+}
+
+.navbar-toggler:focus {
+    border-color: rgba(96, 165, 250, 0.7);
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+
+/* ==================== PROFILE NAV ITEM ==================== */
+
+.profile-nav-item {
+    display: flex;
+    align-items: center;
+}
+
+
+/* ==================== PROFILE NAVBAR BUTTON ==================== */
+
+.profile-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+
+    padding: 0 !important;
+    margin: 0;
+
+    color: #ffffff !important;
+    background: transparent !important;
+
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+
+    font-family: inherit;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.profile-btn:hover,
+.profile-btn:focus,
+.profile-btn:active,
+.profile-btn.show {
+    color: #ffffff !important;
+    background: transparent !important;
+
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Profile dropdown arrow */
+.profile-btn.dropdown-toggle::after {
+    margin-left: 5px !important;
+
+    color: #ffffff;
+
+    transition: transform 0.2s ease;
+}
+
+.profile-btn.dropdown-toggle.show::after {
+    transform: rotate(180deg);
+}
+
+
+/* ==================== SMALL NAVBAR AVATAR ==================== */
+
+.profile-avatar {
+    width: 42px !important;
+    height: 42px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    flex: 0 0 42px;
+
+    color: #ffffff !important;
+
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #8b5cf6
+    ) !important;
+
+    border: none !important;
+    border-radius: 50% !important;
+
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1;
+
+    box-shadow:
+        0 8px 20px rgba(99, 102, 241, 0.25);
+}
+
+.profile-navbar-name {
+    color: #ffffff !important;
+
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+}
+
+
+/* ==================== PROFILE DROPDOWN CARD ==================== */
+
+.dropdown-menu.profile-dropdown {
+    min-width: 280px !important;
+
+    margin-top: 14px !important;
+    padding: 0 !important;
+
+    background: rgba(10, 18, 35, 0.98) !important;
+
+    border: 1px solid rgba(96, 165, 250, 0.15) !important;
+    border-radius: 20px !important;
+
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255,255,255,0.04) !important;
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    overflow: hidden;
+}
+
+
+/* ==================== PROFILE HEADER ==================== */
+
+.profile-header {
+    padding: 28px 20px 20px !important;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(59,130,246,0.12), rgba(139,92,246,0.12));
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+
+/* ==================== LARGE PROFILE CARD AVATAR ==================== */
+
+.profile-dropdown .profile-card-avatar {
+    width: 70px !important;
+    height: 70px !important;
+
+    margin: 0 auto 14px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    color: #ffffff !important;
+
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+
+    border: 3px solid rgba(255,255,255,0.12) !important;
+    border-radius: 50% !important;
+
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+
+    box-shadow:
+        0 8px 24px rgba(99, 102, 241, 0.4),
+        0 0 0 6px rgba(99,102,241,0.08) !important;
+}
+
+
+/* ==================== PROFILE NAME AND ROLE ==================== */
+
+.profile-name {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff !important;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.profile-role-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    color: #93c5fd !important;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(96, 165, 250, 0.25);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* ==================== PROFILE INFORMATION ==================== */
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 20px !important;
+
+    color: #94a3b8 !important;
+    font-size: 0.88rem;
+
+    overflow-wrap: anywhere;
+}
+
+.profile-info-icon {
+    font-size: 0.95rem;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.profile-email {
+    color: #cbd5e1 !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* ==================== PROFILE DIVIDER ==================== */
+
+.profile-divider {
+    margin: 0 !important;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    opacity: 1;
+}
+
+
+/* ==================== PROFILE LOGOUT ==================== */
+
+.profile-logout-container {
+    padding: 8px !important;
+}
+
+.profile-logout {
+    width: 100%;
+    margin: 0 !important;
+    padding: 11px 14px !important;
+    color: #f87171 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 12px !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.profile-logout:hover,
+.profile-logout:focus {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+    transform: none !important;
+}
+
+
+/* ==================== TABLET AND MOBILE ==================== */
+
+@media (max-width: 991.98px) {
+    .navbar {
+        padding: 10px 0;
+    }
+
+    .navbar-collapse {
+        margin-top: 12px;
+        padding: 15px;
+
+        background: rgba(15, 23, 42, 0.96);
+
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+
+        box-shadow:
+            0 15px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .navbar-nav {
+        align-items: stretch !important;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+
+    .nav-link {
+        width: 100%;
+
+        margin: 2px 0;
+        padding: 11px 12px !important;
+
+        border-radius: 8px;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus,
+    .nav-link.active {
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    .nav-link::before {
+        display: none;
+    }
+
+    .dropdown-toggle {
+        justify-content: space-between;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+
+        margin-top: 4px !important;
+        margin-bottom: 6px;
+
+        background: rgba(0, 0, 0, 0.22);
+
+        border: none;
+        box-shadow: none;
+    }
+
+    .dropdown-item {
+        padding-left: 22px;
+    }
+
+    .nav-btn {
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .ms-lg-2,
+    .ms-lg-3 {
+        margin-left: 0 !important;
+    }
+
+    /* Mobile profile */
+    .profile-nav-item {
+        display: block;
+        width: 100%;
+    }
+
+    .profile-btn {
+        width: 100% !important;
+
+        margin-top: 10px;
+        padding: 8px 12px !important;
+
+        justify-content: flex-start !important;
+
+        border-radius: 10px !important;
+    }
+
+    .profile-btn:hover,
+    .profile-btn:focus,
+    .profile-btn.show {
+        background: rgba(255, 255, 255, 0.07) !important;
+    }
+
+    .profile-btn.dropdown-toggle::after {
+        margin-left: auto !important;
+    }
+
+    .dropdown-menu.profile-dropdown {
+        width: 100% !important;
+        min-width: 100% !important;
+
+        margin-top: 8px !important;
+
+        background: rgba(15, 23, 42, 0.98) !important;
+
+        border: 1px solid rgba(96, 165, 250, 0.18) !important;
+        box-shadow: none !important;
+    }
+}
+
+
+/* ==================== SMALL MOBILE ==================== */
+
+@media (max-width: 575.98px) {
+    .navbar {
+        min-height: 68px;
+    }
+
+    .navbar-brand {
+        font-size: 1.35rem !important;
+        letter-spacing: 1.5px;
+    }
+
+    .profile-avatar {
+        width: 38px !important;
+        height: 38px !important;
+
+        flex-basis: 38px;
+
+        font-size: 15px;
+    }
+
+    .profile-dropdown .profile-card-avatar {
+        width: 64px !important;
+        height: 64px !important;
+
+        font-size: 24px !important;
+    }
+}
+/* ==================== SIGN-UP BUTTON ==================== */
+
+.signup-btn {
+    position: relative;
+  
+    min-width: 100px;
+    padding: 10px 18px;
+  
+    color: #111827 !important;
+    background: #ffffff !important;
+  
+    border: 1px solid transparent !important;
+    border-radius: 12px;
+  
+    font-weight: 600;
+    text-decoration: none;
+  
+    transition:
+      color 0.25s ease,
+      background 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  
+  /* Normal hover */
+  .signup-btn:hover,
+  .signup-btn:focus {
+    color: #111827 !important;
+    background: #f8fafc !important;
+  
+    transform: translateY(-2px);
+  
+    box-shadow:
+      0 10px 25px rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Active when the current route is /register */
+  .signup-btn.signup-active {
+    color: #ffffff !important;
+  
+    background:
+      linear-gradient(
+        135deg,
+        #3b82f6,
+        #8b5cf6
+      ) !important;
+  
+    border-color: rgba(255, 255, 255, 0.22) !important;
+  
+    box-shadow:
+      0 0 0 3px rgba(59, 130, 246, 0.15),
+      0 12px 28px rgba(59, 130, 246, 0.3),
+      0 0 22px rgba(139, 92, 246, 0.18) !important;
+  }
+  
+  /* Active button hover and keyboard focus */
+  .signup-btn.signup-active:hover,
+  .signup-btn.signup-active:focus {
+    color: #ffffff !important;
+  
+    background:
+      linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+      ) !important;
+  
+    transform: translateY(-2px);
+  
+    box-shadow:
+      0 0 0 3px rgba(59, 130, 246, 0.2),
+      0 15px 32px rgba(59, 130, 246, 0.35),
+      0 0 26px rgba(139, 92, 246, 0.22) !important;
+  }
+  
+  /* Accessible keyboard focus */
+  .signup-btn:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 3px;
+  }

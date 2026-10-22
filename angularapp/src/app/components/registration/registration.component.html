@@ -1,0 +1,298 @@
+<div class="register-wrapper">
+
+    <div class="register-card">
+  
+      <!-- Heading -->
+      <div class="text-center mb-4">
+        <h2 class="register-title">
+          Create Account
+        </h2>
+  
+        <p class="register-subtitle">
+          Join FinanceHub and start your financial journey
+        </p>
+      </div>
+  
+      <!-- Registration Form -->
+      <form
+        [formGroup]="registerForm"
+        (ngSubmit)="register()"
+        novalidate>
+  
+        <!-- Username -->
+        <div class="mb-3">
+  
+          <label
+            for="username"
+            class="form-label">
+            Username
+          </label>
+  
+          <input
+            id="username"
+            type="text"
+            class="form-control"
+            formControlName="username"
+            placeholder="Enter username"
+            autocomplete="username"
+            [class.is-invalid]="
+              f['username'].touched &&
+              f['username'].invalid
+            ">
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['username'].touched &&
+              f['username'].hasError('required')
+            ">
+            Username is required
+          </small>
+  
+        </div>
+  
+        <!-- Email -->
+        <div class="mb-3">
+  
+          <label
+            for="email"
+            class="form-label">
+            Email
+          </label>
+  
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="Enter email"
+            autocomplete="email"
+            [class.is-invalid]="
+              f['email'].touched &&
+              f['email'].invalid
+            ">
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['email'].touched &&
+              f['email'].hasError('required')
+            ">
+            Email is required
+          </small>
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['email'].touched &&
+              !f['email'].hasError('required') &&
+              f['email'].hasError('pattern')
+            ">
+            Enter a valid email address
+          </small>
+  
+        </div>
+  
+        <!-- Password -->
+        <div class="mb-3">
+  
+          <label
+            for="password"
+            class="form-label">
+            Password
+          </label>
+  
+          <input
+            id="password"
+            type="password"
+            class="form-control"
+            formControlName="password"
+            placeholder="Enter password"
+            autocomplete="new-password"
+            [class.is-invalid]="
+              f['password'].touched &&
+              f['password'].invalid
+            ">
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['password'].touched &&
+              f['password'].hasError('required')
+            ">
+            Password is required
+          </small>
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['password'].touched &&
+              !f['password'].hasError('required') &&
+              f['password'].hasError('pattern')
+            ">
+            Password must have at least 8 characters, including one uppercase
+            letter, one lowercase letter, one number, and one special character
+            from @ $ ! % * ? &amp;.
+          </small>
+  
+        </div>
+  
+        <!-- Confirm Password -->
+        <div class="mb-3">
+  
+          <label
+            for="confirmPassword"
+            class="form-label">
+            Confirm Password
+          </label>
+  
+          <input
+            id="confirmPassword"
+            type="password"
+            class="form-control"
+            formControlName="confirmPassword"
+            placeholder="Confirm password"
+            autocomplete="new-password"
+            [class.is-invalid]="
+              f['confirmPassword'].touched &&
+              (
+                f['confirmPassword'].invalid ||
+                registerForm.hasError('passwordMismatch')
+              )
+            ">
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['confirmPassword'].touched &&
+              f['confirmPassword'].hasError('required')
+            ">
+            Confirm password is required
+          </small>
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['confirmPassword'].touched &&
+              !f['confirmPassword'].hasError('required') &&
+              registerForm.hasError('passwordMismatch')
+            ">
+            Passwords do not match
+          </small>
+  
+        </div>
+  
+        <!-- Mobile Number -->
+        <div class="mb-3">
+  
+          <label
+            for="mobileNumber"
+            class="form-label">
+            Mobile Number
+          </label>
+  
+          <input
+            id="mobileNumber"
+            type="tel"
+            class="form-control"
+            formControlName="mobileNumber"
+            placeholder="Enter mobile number"
+            inputmode="numeric"
+            autocomplete="tel"
+            maxlength="10"
+            [class.is-invalid]="
+              f['mobileNumber'].touched &&
+              f['mobileNumber'].invalid
+            ">
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['mobileNumber'].touched &&
+              f['mobileNumber'].hasError('required')
+            ">
+            Mobile number is required
+          </small>
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['mobileNumber'].touched &&
+              !f['mobileNumber'].hasError('required') &&
+              f['mobileNumber'].hasError('pattern')
+            ">
+            Enter a valid 10-digit mobile number starting with 6, 7, 8, or 9
+          </small>
+  
+        </div>
+  
+        <!-- Role -->
+        <div class="mb-4">
+  
+          <label
+            for="userRole"
+            class="form-label">
+            Role
+          </label>
+  
+          <div class="custom-select-wrapper" [class.open]="roleDropdownOpen">
+            <button type="button" class="custom-select-trigger" (click)="roleDropdownOpen = !roleDropdownOpen">
+              <span [class.placeholder]="!f['userRole'].value">
+                {{ f['userRole'].value || 'Select Role' }}
+              </span>
+              <svg class="chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="custom-select-dropdown">
+              <div class="custom-option" (click)="selectRole('USER')">USER</div>
+              <div class="custom-option" (click)="selectRole('ADMIN')">ADMIN</div>
+            </div>
+          </div>
+  
+          <small
+            class="text-danger validation-message"
+            *ngIf="
+              f['userRole'].touched &&
+              f['userRole'].hasError('required')
+            ">
+            Role is required
+          </small>
+  
+        </div>
+  
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="btn btn-light w-100 register-btn"
+          [disabled]="registerForm.invalid || isSubmitting">
+  
+          <span
+            *ngIf="isSubmitting"
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true">
+          </span>
+  
+          {{ isSubmitting ? 'Creating...' : 'Create Account' }}
+  
+        </button>
+  
+      </form>
+  
+      <!-- Login Link -->
+      <div class="text-center mt-4">
+  
+        <span class="text-secondary">
+          Already have an account?
+        </span>
+  
+        <a
+          routerLink="/auth/login"
+          class="login-link">
+          Login
+        </a>
+  
+      </div>
+  
+    </div>
+  
+  </div>

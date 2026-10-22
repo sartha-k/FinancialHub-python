@@ -1,0 +1,232 @@
+<app-loader *ngIf="isLoading"></app-loader>
+
+<div class="feedback-page" *ngIf="!isLoading">
+
+  <div class="feedback-card">
+
+    <div class="page-header">
+
+      <div>
+        <p class="eyebrow">Manager Workspace</p>
+        <h2>Feedback Details</h2>
+        <p class="subtitle">
+          Review submitted feedback, view user profiles,
+          and manage feedback records.
+        </p>
+      </div>
+
+      <div class="feedback-count">
+        {{ filteredFeedbackList.length }}
+        {{ filteredFeedbackList.length === 1 ? 'Feedback' : 'Feedbacks' }}
+      </div>
+
+    </div>
+
+    <div class="search-bar" *ngIf="!errorMessage">
+      <div class="search-bar-inner">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by username or feedback..."
+          [(ngModel)]="searchText"
+          (input)="filterFeedbacks()">
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="table-wrapper" *ngIf="filteredFeedbackList.length > 0 && !errorMessage">
+
+      <table class="feedback-table">
+
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>User Name</th>
+            <th>Feedback</th>
+            <th>Posted Date</th>
+            <th>Profile</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let feedback of filteredFeedbackList; let i = index">
+
+            <td>{{ currentPage * pageSize + i + 1 }}</td>
+
+            <td>{{ feedback.user?.username }}</td>
+
+            <td>
+              <button
+                type="button"
+                class="text-preview"
+                [title]="feedback.feedbackText"
+                (click)="openDetails('Feedback', feedback.feedbackText)">
+                {{ feedback.feedbackText }}
+              </button>
+            </td>
+
+            <td>{{ feedback.feedbackDate | date:'dd-MM-yyyy' }}</td>
+
+            <td>
+              <button
+                class="profile-button"
+                type="button"
+                (click)="showProfile(feedback.user)">
+                Show Profile
+              </button>
+            </td>
+
+            <td>
+              <button
+                class="delete-button"
+                type="button"
+                (click)="openDeleteConfirmation(feedback.feedbackId)">
+                Delete
+              </button>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div class="empty-state" *ngIf="filteredFeedbackList.length === 0 && !errorMessage">
+
+      <div class="empty-icon">!</div>
+      <h3>No feedback found</h3>
+      <p *ngIf="!searchText">Customer feedback will appear here after it is submitted.</p>
+      <p *ngIf="searchText">No feedback matched your search.</p>
+
+    </div>
+
+    <div class="pagination-bar" *ngIf="!errorMessage && totalPages > 1">
+
+      <span class="page-info">Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+
+      <div class="page-btns">
+
+        <button
+          type="button"
+          class="page-btn nav-btn"
+          [disabled]="currentPage === 0"
+          (click)="goToPage(currentPage - 1)">
+          &#8249; Prev
+        </button>
+
+        <ng-container *ngFor="let page of getVisiblePages()">
+          <span *ngIf="page === null" class="page-ellipsis">&#8230;</span>
+          <button
+            *ngIf="page !== null"
+            type="button"
+            class="page-btn"
+            [class.active]="page === currentPage"
+            (click)="goToPage(page)">
+            {{ page + 1 }}
+          </button>
+        </ng-container>
+
+        <button
+          type="button"
+          class="page-btn nav-btn"
+          [disabled]="currentPage === totalPages - 1"
+          (click)="goToPage(currentPage + 1)">
+          Next &#8250;
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Details Dialog -->
+<div class="details-overlay" *ngIf="showDetails && !isLoading" (click)="closeDetails()">
+  <div class="details-dialog" role="dialog" aria-modal="true" [attr.aria-label]="selectedTitle" (click)="$event.stopPropagation()">
+    <div class="details-header">
+      <h3>{{ selectedTitle }}</h3>
+    </div>
+    <div class="details-content">{{ selectedText }}</div>
+    <div class="details-actions">
+      <button type="button" class="details-button" (click)="closeDetails()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Popup -->
+<div class="popup-overlay" *ngIf="displayDeletePopup && !isLoading">
+
+  <div class="delete-confirmation-popup">
+
+    <div class="delete-warning-icon">!</div>
+
+    <h3>Delete Feedback?</h3>
+
+    <p class="delete-confirmation-text">
+      Are you sure you want to delete this feedback?
+      This action cannot be undone.
+    </p>
+
+    <div class="confirmation-buttons">
+
+      <button type="button" class="cancel-delete-button" (click)="cancelDelete()">
+        Cancel
+      </button>
+
+      <button type="button" class="confirm-delete-button" (click)="confirmDelete()">
+        Yes, Delete
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- User Profile Popup -->
+<div class="popup-overlay" *ngIf="displayPopup && !isLoading">
+
+  <div class="profile-popup">
+
+    <div class="profile-icon">
+      {{ selectedUser?.username?.charAt(0)?.toUpperCase() || 'U' }}
+    </div>
+
+    <h3>User Details</h3>
+
+    <p class="popup-subtitle">Profile information of the selected user.</p>
+
+    <div class="user-details">
+
+      <div class="detail-row">
+        <span class="detail-label">Email</span>
+        <span class="detail-value">{{ selectedUser?.email }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Username</span>
+        <span class="detail-value">{{ selectedUser?.username }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">Mobile Number</span>
+        <span class="detail-value">{{ selectedUser?.mobileNumber }}</span>
+      </div>
+
+    </div>
+
+    <button class="close-button" type="button" (click)="closePopup()">Close</button>
+
+  </div>
+
+</div>

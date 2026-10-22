@@ -1,0 +1,123 @@
+.edit-wrapper {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.edit-card {
+    width: 100%;
+    max-width: 550px;
+
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.35),
+        0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.edit-title {
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.edit-subtitle {
+    color: #bdbdbd;
+    font-size: 0.95rem;
+}
+
+.form-label {
+    color: #e5e7eb;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.textarea-control {
+    min-height: 70px;
+    height: auto;
+    resize: vertical;
+    padding-top: 12px;
+}
+
+.form-control,
+.form-select {
+    height: 50px;
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.form-control::placeholder,
+.textarea-control::placeholder {
+    color: #9ca3af;
+}
+
+.form-control:focus,
+.form-select:focus,
+.textarea-control:focus {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+
+    border-color: #6366f1;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
+
+.form-select option {
+    background: #111111;
+    color: #ffffff;
+}
+
+.text-danger {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.edit-btn {
+    height: 50px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.back-btn {
+    border-radius: 10px;
+    font-weight: 600;
+    height: 50px;
+    width: 70px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    appearance: textfield;
+}
+
+@media (max-width: 576px) {
+
+    .edit-card {
+        padding: 25px;
+    }
+
+    .edit-title {
+        font-size: 1.6rem;
+    }
+}

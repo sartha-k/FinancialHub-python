@@ -1,0 +1,94 @@
+:host {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+  
+    display: block;
+  
+    width: 100vw;
+    height: 100vh;
+  
+    pointer-events: all;
+  }
+  
+  /* Transparent full-screen loader background */
+  .loader-overlay {
+    position: fixed;
+    inset: 0;
+  
+    width: 100vw;
+    height: 100vh;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    background: transparent;
+  
+    perspective: 600px;
+  }
+  
+  /* White glowing and flipping square */
+  .flip-box {
+    width: 55px;
+    height: 55px;
+  
+    background-color: #ffffff;
+  
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+  
+    transform-style: preserve-3d;
+    backface-visibility: visible;
+    will-change: transform, box-shadow;
+  
+    box-shadow:
+      0 0 10px rgba(255, 255, 255, 0.95),
+      0 0 25px rgba(255, 255, 255, 0.8),
+      0 0 50px rgba(255, 255, 255, 0.55),
+      0 0 80px rgba(255, 255, 255, 0.3);
+  
+    animation:
+      flip 1.6s ease-in-out infinite,
+      white-glow 1.6s ease-in-out infinite;
+  }
+  
+  /* Flipping animation */
+  @keyframes flip {
+    0% {
+      transform:
+        rotateX(0deg)
+        rotateY(0deg);
+    }
+  
+    50% {
+      transform:
+        rotateX(-180deg)
+        rotateY(0deg);
+    }
+  
+    100% {
+      transform:
+        rotateX(-180deg)
+        rotateY(-180deg);
+    }
+  }
+  
+  /* White glow animation */
+  @keyframes white-glow {
+    0%,
+    100% {
+      box-shadow:
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 22px rgba(255, 255, 255, 0.6),
+        0 0 45px rgba(255, 255, 255, 0.35);
+    }
+  
+    50% {
+      box-shadow:
+        0 0 15px rgba(255, 255, 255, 1),
+        0 0 35px rgba(255, 255, 255, 0.9),
+        0 0 65px rgba(255, 255, 255, 0.65),
+        0 0 95px rgba(255, 255, 255, 0.4);
+    }
+  }

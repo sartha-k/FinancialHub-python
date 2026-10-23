@@ -1,0 +1,33 @@
+<h1>FinanceHub Dashboard</h1>
+
+<h2>Savings Plans</h2>
+
+<table border="1" cellpadding="10">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Interest Rate</th>
+      <th>Time Frame</th>
+      <th>Risk Level</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (plan of savingsPlans; track plan.savingsPlanId) {
+      <tr>
+        <td>{{ plan.savingsPlanId }}</td>
+        <td>{{ plan.name }}</td>
+        <td>{{ plan.rateOfInterest }}%</td>
+        <td>{{ plan.timeFrame }}</td>
+        <td>{{ plan.riskLevel }}</td>
+        <td>{{ plan.status }}</td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="6">No Savings Plans found</td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -1,7 +1,7 @@
 from fastapi import HTTPException,Depends,APIRouter
 from database import  SessionLocal
 from models import SavingsPlanTable
-from schemas import SavingsPlan
+from schemas import ApiResponse, PaginatedResponse, SavingPlanDetailResponse, SavingsPlan, SavingsPlanCreate, SavingsPlanResponse
 from sqlalchemy.orm import Session
 from fastapi import Query
 from services import savings_plan_service
@@ -16,25 +16,34 @@ def get_db():
         db.close()
 
 
-@router.get("")
+@router.get("",response_model=ApiResponse[PaginatedResponse[SavingsPlanResponse]])
 def get_all_savingsPlan(
     page:int =Query(default=0,ge=0),
     size:int = Query(default=5,ge=1,le=100),
     keyword:str|None = Query(default=None),
     db:Session=Depends(get_db)):
 
-    return savings_plan_service.get_all_savingsPlan(page,size,keyword,db)
-        
+    result= savings_plan_service.get_all_savingsPlan(page,size,keyword,db)
+    return {
+        "success":True,
+        "message":"Savings plans fetched successfully",
+        "data":result
+    }
 
-@router.get("/{savingsPlanId}")
+@router.get("/{savingsPlanId}",response_model=ApiResponse[SavingsPlanResponse])
 def get_savingsPlan_by_id(savingsPlanId:int,db:Session=Depends(get_db)):
     row = savings_plan_service.get_savingsPlan_by_id(savingsPlanId,db)
     if not row:
         raise HTTPException(status_code=404,detail="Savings plan not found")
-    return row
+    return {
+        "success":"true",
+        "message":"Savings plan fetched found",
+        "data":row
+    }
 
 @router.post("",status_code=201)
-def add_savings_plan(plan:SavingsPlan,db:Session=Depends(get_db)):
+def add_savings_plan(plan:SavingsPlanCreate,db:Session=Depends(get_db)):
+
     return savings_plan_service.create_savings_Plan(db,plan)
 
 @router.put("/{savingsPlanId}")

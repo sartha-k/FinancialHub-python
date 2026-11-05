@@ -1,0 +1,175 @@
+2026-11-05 02:17:04,674 | INFO | services.savings_plan_service | Creating savings Plan: Testing to check the loggers
+2026-11-05 02:17:04,676 | WARNING | services.savings_plan_service | Savings plan creation failed due to integrity constraint
+2026-11-05 02:17:04,677 | ERROR | services.savings_plan_service | Failed to insert savings plan
+Traceback (most recent call last):
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1946, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1192, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\cursors.py", line 335, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 581, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 857, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 1290, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 810, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\err.py", line 154, in raise_mysql_exception
+    raise errorclass(errno, errval, sqlstate=sqlstate)
+pymysql.err.IntegrityError: (1062, "Duplicate entry 'Testing to check the loggers' for key 'savingsplans.uq_savingsPlan_name'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\Fastapi\services\savings_plan_service.py", line 61, in create_savings_Plan
+    db.commit()
+    ~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2095, in commit
+    trans.commit(_to_root=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction.commit>", line 2, in commit
+    return target(fn, self, _to_root=_to_root)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1330, in commit
+    self._prepare_impl()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "<sqlalchemy generated _go() wrapper for sqlalchemy.orm.session.SessionTransaction._prepare_impl>", line 2, in _prepare_impl
+    return target(fn, self)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 1304, in _prepare_impl
+    self.session.flush()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4536, in flush
+    self._flush(objects)
+    ~~~~~~~~~~~^^^^^^^^^
+  File "<sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush>", line 2, in _flush
+    return target(fn, self, objects=objects)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4679, in _flush
+    with util.safe_reraise():
+         ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py", line 166, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 4640, in _flush
+    flush_context.execute()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 467, in execute
+    rec.execute(self)
+    ~~~~~~~~~~~^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py", line 643, in execute
+    util.preloaded.orm_persistence._save_obj(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self.mapper,
+        ^^^^^^^^^^^^
+        uow.states_for_mapper_hierarchy(self.mapper, False, False),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        uow,
+        ^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 92, in _save_obj
+    _emit_insert_statements(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        base_mapper,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        insert,
+        ^^^^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\orm\persistence.py", line 1237, in _emit_insert_statements
+    result = connection.execute(
+        statement,
+        params,
+        execution_options=execution_options,
+    )
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1451, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 533, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1671, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<9 lines>...
+        param_dict=param_dict,
+    )
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1825, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1965, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2335, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1946, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 1192, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\cursors.py", line 335, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 581, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 857, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 1290, in read
+    first_packet = self.connection._read_packet()
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\connections.py", line 810, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\sarth\OneDrive\Desktop\FinancialHub-python\.venv\Lib\site-packages\pymysql\err.py", line 154, in raise_mysql_exception
+    raise errorclass(errno, errval, sqlstate=sqlstate)
+sqlalchemy.exc.IntegrityError: (pymysql.err.IntegrityError) (1062, "Duplicate entry 'Testing to check the loggers' for key 'savingsplans.uq_savingsPlan_name'")
+[SQL: INSERT INTO `savingsPlans` (name, `rateOfInterest`, `timeFrame`, `riskLevel`, description, status) VALUES (%(name)s, %(rateOfInterest)s, %(timeFrame)s, %(riskLevel)s, %(description)s, %(status)s)]
+[parameters: {'name': 'Testing to check the loggers', 'rateOfInterest': 7.5, 'timeFrame': 12, 'riskLevel': 'LOW', 'description': 'Testing database integrity', 'status': 'ACTIVE'}]
+(Background on this error at: https://sqlalche.me/e/21/gkpj)

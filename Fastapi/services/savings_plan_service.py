@@ -3,6 +3,8 @@ from models import SavingsPlanTable
 from math import ceil
 from schemas import SavingsPlan
 from fastapi import HTTPException
+from sqlalchemy import inspect
+
 def get_all_savingsPlan(
     page:int,
     size:int,
@@ -58,6 +60,28 @@ def update_savings_plan(plan:SavingsPlan,savingsPlanId:int,db:Session):
         db.refresh(row)
     
     return row
+
+def patch_savings_plan(savingsPlanId, plan, db):
+      # 1. Fetch ORM object
+    row = db.query(SavingsPlanTable).filter(SavingsPlanTable.savingsPlanId==savingsPlanId).first()
+    if row is None:
+        return None
+     # 2. Extract provided fields from Pydantic
+    update_data = plan.model_dump(
+        exclude_unset = True,
+        exclude_none = True
+    )
+      # 3. Modify ORM object
+    for key,value in update_data.items():
+        setattr(row,key,value)
+    # 4. Save changes
+    db.commit()
+     # 5. Reload updated values
+    db.refresh(row)
+
+    return row
+
+
 
 def delete_savings_plan(savingsPlanId:int,db:Session):
     row = db.query(SavingsPlanTable).filter(SavingsPlanTable.savingsPlanId==savingsPlanId).first()

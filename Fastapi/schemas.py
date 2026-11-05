@@ -45,6 +45,15 @@ class SavingsPlanCreate(BaseModel):
     description: str
     status: str
 
+class SavingsPlanUpdate(BaseModel):
+    savingsPlanId:int | None = Field(default=None, min_length=3, max_length=100)
+    name:str | None = None
+    rateOfInterest:float | None = Field(default=None, ge=0, le=100)
+    timeFrame:int |  None = Field(default=None, gt=0)
+    riskLevel:str | None = None
+    description:str | None = None
+    status:str | None = None
+
     @field_validator("riskLevel")
     @classmethod
     def validate_risk_level(cls, value):

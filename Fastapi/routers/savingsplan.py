@@ -1,7 +1,7 @@
 from fastapi import HTTPException,Depends,APIRouter
 from database import  SessionLocal
 from models import SavingsPlanTable
-from schemas import ApiResponse, PaginatedResponse, SavingPlanDetailResponse, SavingsPlan, SavingsPlanCreate, SavingsPlanResponse
+from schemas import ApiResponse, PaginatedResponse, SavingPlanDetailResponse, SavingsPlan, SavingsPlanCreate, SavingsPlanResponse, SavingsPlanUpdate
 from sqlalchemy.orm import Session
 from fastapi import Query
 from services import savings_plan_service
@@ -50,7 +50,18 @@ def add_savings_plan(plan:SavingsPlanCreate,db:Session=Depends(get_db)):
 def update_savings_plan(plan:SavingsPlan,savingsPlanId:int,db:Session=Depends(get_db)):
     return savings_plan_service.update_savings_plan(plan,savingsPlanId,db)
     
-    
+@router.patch("/{savingsPlanId}")
+def patch_savings_plan(
+    savingsPlanId: int,
+    plan: SavingsPlanUpdate,
+    db: Session = Depends(get_db)
+):
+    row = savings_plan_service.patch_savings_plan(
+        savingsPlanId,plan,db
+    )
+    if row is None:
+        raise HTTPException(status_code=404,detail="Savings plan not found")
+    return row
 
 @router.delete("/{savingsPlanId}")
 def delete_savings_plan(savingsPlanId:int,db:Session=Depends(get_db)):

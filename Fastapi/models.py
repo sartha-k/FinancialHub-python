@@ -22,3 +22,21 @@ class SavingsPlanTable(Base):
     description=Column(String(100))
     status=Column(String(100))
 
+class UserTable(Base):
+
+    __tablename__="users"
+    
+    # Unique identifier for each user
+    id=Column(Integer,primary_key=True,index=True)
+
+    # User's name
+    username=Column(String(100),nullable=False)
+
+    # Email must be unique
+    email = Column(String(255),unique=True,nullable=False)
+
+    # Store a password hash, never the original password
+    hashed_password = Column(String(255),nullable=False)
+    
+    # Used later for authorization
+    role = Column(String(20),nullable=False,default="User")

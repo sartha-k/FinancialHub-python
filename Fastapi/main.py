@@ -7,10 +7,9 @@ creates any missing database tables on startup, and configures CORS so the Angul
 frontend running on localhost:4200 is allowed to talk to this API.
 Run this file with uvicorn to start the server.
 """
-from fastapi import FastAPI,Request,HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI,HTTPException
 from fastapi.exceptions import RequestValidationError
-from routers import savingsplan
+from routers import savingsplan,auth
 from database import  engine
 import models
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,7 +23,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
     filename="financehub.log",
-    filemode="a"
+    filemode="w"
 )
 # FastAPI app instance
 app = FastAPI()
@@ -46,6 +45,7 @@ def greet():
 
 # Register the savings plan router under /api/savingsPlan
 app.include_router(savingsplan.router)
+app.include_router(auth.router)
 
 # Create all DB tables defined in models if they don't exist
 models.Base.metadata.create_all(bind=engine)

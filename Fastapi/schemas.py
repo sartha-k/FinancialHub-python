@@ -7,7 +7,7 @@ response matches the expected structure and types before anything reaches the
 database. If you need to change what fields are accepted or returned by the API,
 this is the file to edit.
 """
-from pydantic import BaseModel,ConfigDict,Field,field_validator,model_validator
+from pydantic import BaseModel,ConfigDict,Field,field_validator,model_validator,EmailStr
 from typing import Generic,TypeVar,Self
 
 # Full savings plan schema including the ID, used for PUT updates
@@ -108,3 +108,24 @@ class SavingsPlanUpdate(BaseModel):
                 "HIGH risk plans must have a timeframe of atleast 12 months"
             )
         return self
+
+# Data accepted from the client during registration
+class UserCreate(BaseModel):
+        username:str = Field(min_length=3,max_length=100)
+        email:EmailStr
+        password:str=Field(min_length=8)
+
+# Data returned to the client
+class UserResponse(BaseModel):
+        id:int
+        username:str
+        email:EmailStr
+        role:str
+
+class UserLogin(BaseModel):
+    email:EmailStr
+    password:str
+
+class TokenResponse(BaseModel):
+    access_token:str
+    token_type:str="bearer"

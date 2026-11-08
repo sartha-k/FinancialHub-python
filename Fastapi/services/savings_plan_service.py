@@ -149,7 +149,9 @@ def patch_savings_plan(savingsPlanId, plan, db):
 # Deletes a savings plan by ID; returns True on success, False if not found
 def delete_savings_plan(savingsPlanId:int,db:Session):
     row = db.query(SavingsPlanTable).filter(SavingsPlanTable.savingsPlanId==savingsPlanId).first()
+    logger.info("Attempting to delete savings plan with ID: %s", savingsPlanId)
     if not row:
+        logger.warning("Savings plan with ID %s not found for deletion", savingsPlanId)
         return False
     db.delete(row)
     db.commit()

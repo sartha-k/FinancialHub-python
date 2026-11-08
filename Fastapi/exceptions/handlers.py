@@ -46,3 +46,4 @@ async def validation_exception_handler(
             "errors": formatted_errors
         }
     )
+

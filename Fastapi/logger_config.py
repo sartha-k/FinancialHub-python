@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 #Create a handler that writes logs to file
 file_handler = logging.FileHandler(
     "financehub.log",
-    mode="w",
+    mode="a",
     encoding="utf-8"
 )
 

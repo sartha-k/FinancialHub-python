@@ -9,8 +9,9 @@ incoming request, calls the appropriate service function to do the real work,
 and sends back a structured response.
 """
 from fastapi import HTTPException,Depends,APIRouter
+from dependencies.auth_dependency import get_current_user, require_roles
 from database import  SessionLocal
-from models import SavingsPlanTable
+from models import SavingsPlanTable, UserTable
 from schemas import ApiResponse, PaginatedResponse, SavingPlanDetailResponse, SavingsPlan, SavingsPlanCreate, SavingsPlanResponse, SavingsPlanUpdate
 from sqlalchemy.orm import Session
 from fastapi import Query
@@ -36,7 +37,7 @@ def get_all_savingsPlan(
     page:int =Query(default=0,ge=0),
     size:int = Query(default=5,ge=1,le=100),
     keyword:str|None = Query(default=None),
-    db:Session=Depends(get_db)):
+    db:Session=Depends(get_db),current_user: UserTable = Depends(get_current_user)):
 
     result= savings_plan_service.get_all_savingsPlan(page,size,keyword,db)
     return {
@@ -47,7 +48,7 @@ def get_all_savingsPlan(
 
 # GET /api/savingsPlan/{id} — returns a single savings plan or 404 if not found
 @router.get("/{savingsPlanId}",response_model=ApiResponse[SavingsPlanResponse])
-def get_savingsPlan_by_id(savingsPlanId:int,db:Session=Depends(get_db)):
+def get_savingsPlan_by_id(savingsPlanId:int,db:Session=Depends(get_db),current_user:UserTable=Depends(get_current_user)):
     row = savings_plan_service.get_savingsPlan_by_id(savingsPlanId,db)
     if not row:
         raise HTTPException(status_code=404,detail="Savings plan not found")
@@ -59,7 +60,7 @@ def get_savingsPlan_by_id(savingsPlanId:int,db:Session=Depends(get_db)):
 
 # POST /api/savingsPlan — creates and returns a new savings plan
 @router.post("",status_code=201)
-def add_savings_plan(plan:SavingsPlanCreate,db:Session=Depends(get_db)):
+def add_savings_plan(plan:SavingsPlanCreate,db:Session=Depends(get_db),current_user:UserTable=Depends(require_roles(["ADMIN","MANAGER"]))):
 
     return savings_plan_service.create_savings_Plan(db,plan)
 
@@ -73,7 +74,7 @@ def update_savings_plan(plan:SavingsPlan,savingsPlanId:int,db:Session=Depends(ge
 def patch_savings_plan(
     savingsPlanId: int,
     plan: SavingsPlanUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),current_user:UserTable=Depends(require_roles(["ADMIN","MANAGER"]))
 ):
     row = savings_plan_service.patch_savings_plan(
         savingsPlanId,plan,db
@@ -84,7 +85,7 @@ def patch_savings_plan(
 
 # DELETE /api/savingsPlan/{id} — deletes a savings plan or raises 404 if not found
 @router.delete("/{savingsPlanId}")
-def delete_savings_plan(savingsPlanId:int,db:Session=Depends(get_db)):
+def delete_savings_plan(savingsPlanId:int,db:Session=Depends(get_db),current_user:UserTable=Depends(require_roles(["ADMIN"]))):
     deleted = savings_plan_service.delete_savings_plan(savingsPlanId,db)
     if not deleted:
         raise HTTPException(status_code=404,detail="Savings plan is not existed")

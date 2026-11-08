@@ -1,12 +1,14 @@
 from pwdlib import PasswordHash
 import os
 import jwt
+import logging
 from datetime import datetime,timedelta,timezone
 from fastapi import HTTPException,status
 from jwt.exceptions import ExpiredSignatureError,InvalidTokenError
 # Configure the recommended password hashing algorithm
 password_hash = PasswordHash.recommended()
 
+logger = logging.getLogger(__name__)
 def hash_password(password:str)->str:
     # Convert plaintext password into a secure hash
     return password_hash.hash(password)
@@ -56,9 +58,10 @@ def verify_access_token(token:str)->int:
             options = {"require":["sub","exp"]}
             )
         #Extract the user ID from the token
+        logger.info("The Payload in verification is %s",payload)
         user_id = int(payload["sub"])
         header = jwt.get_unverified_header(token)
-        print(header)
+        logger.info("The Header in verification is %s",header)
         return user_id
 
     except ExpiredSignatureError:
@@ -74,6 +77,6 @@ def verify_access_token(token:str)->int:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid access token",
-            header = {"WWW-Authenticate":"Bearer"}
+            headers={"WWW-Authenticate": "Bearer"}
         )
 

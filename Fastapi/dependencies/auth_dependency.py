@@ -30,7 +30,7 @@ def get_current_user(token:str = Depends(oauth2_scheme),db:Session=Depends(get_d
         raise HTTPException(status_code=401,detail="Invalid authentication credentials")
 
     return existing_user
-//closure function to check if the current user has one of the allowed roles
+#closure function to check if the current user has one of the allowed roles
 def require_roles(allowed_roles):
     def check_roles(current_user:UserTable=Depends(get_current_user)):
         if current_user.role not in allowed_roles:

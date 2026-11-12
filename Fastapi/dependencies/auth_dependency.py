@@ -26,6 +26,7 @@ def get_current_user(token:str = Depends(oauth2_scheme),db:Session=Depends(get_d
     user_id = verify_access_token(token)
     existing_user = db.query(UserTable).filter(UserTable.id==user_id).first()
 
+
     if existing_user is None:
         raise HTTPException(status_code=401,detail="Invalid authentication credentials")
 

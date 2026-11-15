@@ -6,7 +6,7 @@ SQLAlchemy reads these classes and maps them to actual tables in MySQL.
 Each attribute on the class represents a column. If you need to add, rename,
 or remove a column from the savingsPlans table, this is the file to edit.
 """
-from sqlalchemy import Column,Integer, String,Float
+from sqlalchemy import Column,Integer, String,Float,ForeignKey,DateTime
 from database import Base
 
 # ORM model mapping to the 'savingsPlans' table
@@ -40,3 +40,17 @@ class UserTable(Base):
     
     # Used later for authorization
     role = Column(String(20),nullable=False,default="User")
+
+class RefreshTokenTable(Base):
+    __tablename__="RefreshToken"
+
+    #Primary Key
+    id = Column(Integer,primary_key=True,index=True)
+
+    user_id = Column(Integer,ForeignKey("users.id"),nullable=False)
+
+    token_hash = Column(String(255),unique=True,nullable=False)
+
+    expire_at = Column(DateTime,nullable=False)
+
+    revoked_at = Column(DateTime,nullable=True)

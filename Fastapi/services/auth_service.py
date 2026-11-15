@@ -1,10 +1,13 @@
+from datetime import datetime, timedelta, timezone
+
 from fastapi import HTTPException
+import jwt
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from logger_config import logging
-from models import UserTable
+from models import RefreshTokenTable, UserTable
 from schemas import UserCreate, UserLogin
-from security import hash_password,verify_password,create_access_token
+from security import SECRET_KEY, Algorithm, hash_password, hash_refresh_token,verify_password,create_access_token,create_refresh_token, verify_refresh_token
 
 
 
@@ -31,7 +34,7 @@ def register_user(user:UserCreate,db:Session):
         hashed_password = hashed,
         role = "USER"
     )
- # 4. Save the user
+ # 4. Save the user()
     try:
         db.add(new_user)
         db.commit()
@@ -71,11 +74,52 @@ def login_user(user:UserLogin,db:Session):
             status_code=401,
             detail="Invalid email or password"
         )
-    logger.info("User's Password has verified")
+    logger.info("User's Password has verified and Generating tokens for user")
 
       # Generate JWT for authenticated user
-    token = create_access_token(existing_user.id)
+    access_token = create_access_token(existing_user.id)
+    refresh_token = create_refresh_token(existing_user.id)
     return {
-        "access_token":token,
+        "access_token":access_token,
+        "refresh_token":refresh_token,
         "token_type":"bearer"
     }
+
+def generate_refresh_tokens(refresh_token:str,db:Session):
+    #Verify the refresh token first
+    user_id = verify_refresh_token(refresh_token)
+    existing_user = db.get(UserTable,user_id)
+    refresh_token,expire_time = create_refresh_token(existing_user.id)
+    payload = jwt.decode(
+        refresh_token,
+        SECRET_KEY,
+        algorithms = [Algorithm]
+        )
+    token_hash = hash_refresh_token(refresh_token)
+
+    new_token  = RefreshTokenTable(
+        user_id = existing_user.id,
+        token_hash = token_hash,
+        expire_at = expire_time.replace(txinfo=None),
+        revoked_at = None
+    )
+    try:
+        db.add(new_token)
+        db.commit()
+        db.refresh(new_token)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail="Refresh token conflicts with an existing record"
+        )
+
+    if existing_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="User no longer exists"
+        )
+    
+
+
+

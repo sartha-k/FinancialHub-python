@@ -27,3 +27,12 @@ def register(user:UserCreate,db:Session=Depends(get_db)):
 @router.post("/login",response_model=TokenResponse)
 def login(user:UserLogin,db:Session=Depends(get_db)):
     return login_user(user,db)
+
+@router.post("/refresh")
+def refresh_access_token(
+    request:RefreshTokenRequest,
+    db:Session=Depends(get_db)
+):
+    return generate_refresh_tokens(request.refresh_token,db)
+    
+

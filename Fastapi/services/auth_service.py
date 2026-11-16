@@ -49,7 +49,16 @@ def register_user(user:UserCreate,db:Session):
      # 5. Return the created user
     return new_user
 
-
+def save_refresh_token(user_id,token_hash,expire_at,db):
+    new_token = RefreshTokenTable(
+        user_id=user_id,
+        token_hash=token_hash,
+        expire_at=expire_at,
+        revoked_at=None
+    )
+    db.add(new_token)
+    return new_token
+    
 def login_user(user:UserLogin,db:Session):
  # Find user by email
     existing_user = db.query(UserTable).filter(UserTable.email==user.email).first()
@@ -78,17 +87,41 @@ def login_user(user:UserLogin,db:Session):
 
       # Generate JWT for authenticated user
     access_token = create_access_token(existing_user.id)
-    refresh_token = create_refresh_token(existing_user.id)
+    refresh_token,expire_time = create_refresh_token(existing_user.id)
+    payload = jwt.decode(
+            refresh_token,
+            SECRET_KEY,
+            algorithms = [Algorithm]
+            )
+    token_hash = hash_refresh_token(refresh_token)
+    
+    new_token  = save_refresh_token(existing_user.id,token_hash,expire_time,db)
+    try:
+        db.commit()
+        db.refresh(new_token)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+        status_code=409,
+        detail="Refresh token conflicts with an existing record"
+            )
+    
     return {
         "access_token":access_token,
         "refresh_token":refresh_token,
         "token_type":"bearer"
     }
 
+
 def generate_refresh_tokens(refresh_token:str,db:Session):
     #Verify the refresh token first
     user_id = verify_refresh_token(refresh_token)
     existing_user = db.get(UserTable,user_id)
+    if existing_user is None:
+        raise HTTPException(
+            status_code=401,
+            detail="User not found"
+        )
     refresh_token,expire_time = create_refresh_token(existing_user.id)
     payload = jwt.decode(
         refresh_token,
@@ -97,16 +130,11 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
         )
     token_hash = hash_refresh_token(refresh_token)
 
-    new_token  = RefreshTokenTable(
-        user_id = existing_user.id,
-        token_hash = token_hash,
-        expire_at = expire_time.replace(txinfo=None),
-        revoked_at = None
-    )
+    new_token  = save_refresh_token(existing_user.id,token_hash,expire_time,db)
     try:
-        db.add(new_token)
         db.commit()
         db.refresh(new_token)
+   
     except IntegrityError:
         db.rollback()
         raise HTTPException(

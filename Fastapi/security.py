@@ -22,7 +22,7 @@ def verify_password(password:str,hashed_password:str)->bool:
     # Check whether the supplied password matches the stored hash
     return password_hash.verify(password,hashed_password)
 def hash_refresh_token(token:str)->str:
-     return hashlib.sha256(token.encode("utf-8").hexdigest())
+     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 #Load the signing secret from an environment variable
 SECRET_KEY = os.environ["JWT_SECRET_KEY"]
 

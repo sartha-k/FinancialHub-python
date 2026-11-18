@@ -11,7 +11,7 @@ from security import SECRET_KEY, Algorithm, hash_password, hash_refresh_token,ve
 
 
 
-#Create a logger for the current python module
+#Create a logger for the current python module for the purpose of logging events and errors
 logger = logging.getLogger(__name__)
 def register_user(user:UserCreate,db:Session):
 # 1. Check whether the email already exists

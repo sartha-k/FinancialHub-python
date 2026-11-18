@@ -1,2 +1,0 @@
-2026-11-16 23:37:26,799 | INFO | services.auth_service | User exist in the table
-2026-11-16 23:37:26,881 | INFO | services.auth_service | User's Password has verified and Generating tokens for user

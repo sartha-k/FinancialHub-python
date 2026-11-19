@@ -125,6 +125,7 @@ def verify_refresh_token(token:str):
                 detail="Invalid token type"
             )
         user_id = int(payload["sub"])
+        logger.info("The Payload in refresh token verification is %s",payload)
 
         return user_id
     except ExpiredSignatureError:

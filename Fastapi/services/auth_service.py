@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-
+import time
 from fastapi import HTTPException
 import jwt
 from sqlalchemy.orm import Session
@@ -116,21 +116,50 @@ def login_user(user:UserLogin,db:Session):
 def generate_refresh_tokens(refresh_token:str,db:Session):
     #Verify the refresh token first
     user_id = verify_refresh_token(refresh_token)
+    #check user
     existing_user = db.get(UserTable,user_id)
+
     if existing_user is None:
         raise HTTPException(
             status_code=401,
             detail="User not found"
         )
-    refresh_token,expire_time = create_refresh_token(existing_user.id)
-    payload = jwt.decode(
-        refresh_token,
-        SECRET_KEY,
-        algorithms = [Algorithm]
-        )
+    #Hashing R1
     token_hash = hash_refresh_token(refresh_token)
 
-    new_token  = save_refresh_token(existing_user.id,token_hash,expire_time,db)
+    #find R1 in Mysql
+    token_record = db.query(RefreshTokenTable).filter(
+            RefreshTokenTable.token_hash == token_hash,
+            RefreshTokenTable.user_id == existing_user.id
+        ).first()
+    if token_record is None:
+            raise HTTPException(
+            status_code=401,
+            detail="Invalid refresh token"
+        )
+    if token_record.revoked_at is not None:
+            raise HTTPException(
+                status_code=401,
+                detail="Refresh token has been revoked"
+            )
+    if token_record.expire_at <=current_time:
+            raise HTTPException(
+                status_code=401,
+                detail="Refresh token has expired"
+            )
+    print("R1 is validated. Waiting 5 seconds")
+    time.sleep(5)
+    current_time = datetime.now(timezone.utc).replace(tzinfo=None)
+    #Revoke R1
+    token_record.revoked_at=current_time
+    # Generate new refresh token R2
+    access_token = create_access_token(existing_user.id)
+
+    new_refresh_token,expire_time = create_refresh_token(existing_user.id)
+    new_token_hash = hash_refresh_token(new_refresh_token)
+    
+    
+    new_token  = save_refresh_token(existing_user.id,new_token_hash,expire_time,db)
     try:
         db.commit()
         db.refresh(new_token)
@@ -147,6 +176,15 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
             status_code=401,
             detail="User no longer exists"
         )
+    return {
+        "access_token":access_token,
+        "refresh_token":new_refresh_token,
+        "token_type":"bearer"
+
+    }
+
+
+    
     
 
 

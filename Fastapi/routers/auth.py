@@ -2,7 +2,7 @@ from fastapi import APIRouter,Depends,status
 from sqlalchemy.orm import Session
 
 from database import SessionLocal
-from schemas import UserCreate, UserLogin,UserResponse,TokenResponse
+from schemas import RefreshTokenRequest, UserCreate, UserLogin,UserResponse,TokenResponse
 from services.auth_service import generate_refresh_tokens, login_user, register_user
 
 

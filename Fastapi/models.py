@@ -6,16 +6,18 @@ SQLAlchemy reads these classes and maps them to actual tables in MySQL.
 Each attribute on the class represents a column. If you need to add, rename,
 or remove a column from the savingsPlans table, this is the file to edit.
 """
-from sqlalchemy import Column,Integer, String,Float,ForeignKey,DateTime
+from sqlalchemy import Column, Index,Integer, String,Float,ForeignKey,DateTime
 from database import Base
 
 # ORM model mapping to the 'savingsPlans' table
 class SavingsPlanTable(Base):
+    __table_args__ = (
+    Index("ix_savingsPlans_savingsPlanId", "savingsPlanId"),
+)
+    __tablename__="savingsplans"
 
-    __tablename__="savingsPlans"
-
-    savingsPlanId = Column(Integer,primary_key=True,index=True)
-    name = Column(String(100),nullable=False,unique=True)
+    savingsPlanId = Column(Integer,primary_key=True)
+    name = Column(String(100),nullable=True,unique=True)
     rateOfInterest=Column(Float)
     timeFrame =Column(Integer)
     riskLevel=Column(String(100))
@@ -41,11 +43,15 @@ class UserTable(Base):
     # Used later for authorization
     role = Column(String(20),nullable=False,default="User")
 
-class RefreshTokenTable(Base):
-    __tablename__="RefreshToken"
+    phone_number = Column(String(15), nullable=True)
 
+class RefreshTokenTable(Base):
+    __tablename__="refreshtoken"
+    __table_args__ = (
+    Index("ix_RefreshToken_id", "id"),
+)
     #Primary Key
-    id = Column(Integer,primary_key=True,index=True)
+    id = Column(Integer,primary_key=True)
 
     user_id = Column(Integer,ForeignKey("users.id"),nullable=False)
 

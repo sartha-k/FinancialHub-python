@@ -137,6 +137,7 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
             status_code=401,
             detail="Invalid refresh token"
         )
+    current_time = datetime.now(timezone.utc).replace(tzinfo=None)
     if token_record.revoked_at is not None:
             raise HTTPException(
                 status_code=401,
@@ -146,12 +147,27 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
             raise HTTPException(
                 status_code=401,
                 detail="Refresh token has expired"
-            )
-    print("R1 is validated. Waiting 5 seconds")
-    time.sleep(5)
-    current_time = datetime.now(timezone.utc).replace(tzinfo=None)
+            )    
     #Revoke R1
-    token_record.revoked_at=current_time
+    updated_rows = (
+         db.query(RefreshTokenTable)
+         .filter(
+              RefreshTokenTable.id == token_record.id,
+              RefreshTokenTable.revoked_at.is_(None),
+              RefreshTokenTable.expire_at > current_time
+         )
+         .update(
+              {RefreshTokenTable.revoked_at:current_time},
+              synchronize_session=False
+         )
+         )
+    print("Updated rows are",updated_rows)
+    if updated_rows!=1:
+         db.rollback()
+         raise HTTPException(
+              status_code=401,
+              detail="Refresh token already used or expired -- Experienced Race Condition"
+         )
     # Generate new refresh token R2
     access_token = create_access_token(existing_user.id)
 
@@ -185,7 +201,60 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
 
 
     
+def logout_user(refresh_token:str,db:Session)->str:
+    user_id = verify_refresh_token(refresh_token)
+    existing_user = db.get(UserTable,user_id)
+
+    if existing_user is None:
+         raise HTTPException(
+              status_code=404,
+              detail="user not found"
+         )
+    hash_token = hash_refresh_token(refresh_token)
+    token_record = db.query(RefreshTokenTable).filter(RefreshTokenTable.token_hash==hash_token).first()
+    if token_record is None:
+         raise HTTPException(
+              status_code=401,
+              detail="User is unauthorised"
+         )
+    current_time = datetime.now(timezone.utc).replace(tzinfo=None)
+    update_rows = db.query(RefreshTokenTable).filter(
+         RefreshTokenTable.user_id==user_id,
+         RefreshTokenTable.token_hash==hash_token,
+         RefreshTokenTable.revoked_at.is_(None)
+         ).update(
+              {RefreshTokenTable.revoked_at:current_time},
+               synchronize_session=False
+         )
+    if update_rows != 1:
+        db.rollback()
+        raise HTTPException(
+            status_code=401,
+            detail="Refresh token already revoked"
+        )
+    try:
+        db.commit()
+        db.refresh(token_record)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+                status_code=409,
+                detail="Refresh token conflicts with an existing record"
+            )
+    except Exception as e:
+        db.rollback()
+        logger.exception("Unexpected error during logout")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Internal Server Error"
+        ) from e
+
+    return "User logout successfully"
     
+
+
+
 
 
 

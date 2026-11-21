@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from database import SessionLocal
 from schemas import RefreshTokenRequest, UserCreate, UserLogin,UserResponse,TokenResponse
-from services.auth_service import generate_refresh_tokens, login_user, register_user
+from services.auth_service import generate_refresh_tokens, login_user, logout_user, register_user
 
 
 router = APIRouter(
@@ -35,4 +35,8 @@ def refresh_access_token(
 ):
     return generate_refresh_tokens(request.refresh_token,db)
     
+@router.post("/logout")
+def logout(request:RefreshTokenRequest,db:Session=Depends(get_db)
+           ):
+    return logout_user(request.refresh_token,db)
 

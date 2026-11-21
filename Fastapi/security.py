@@ -1,5 +1,5 @@
 from pwdlib import PasswordHash
-import os
+from config import settings
 import jwt
 import logging
 from datetime import datetime,timedelta,timezone
@@ -8,7 +8,7 @@ from jwt.exceptions import ExpiredSignatureError,InvalidTokenError
 from dotenv import load_dotenv
 import hashlib
 import uuid
-load_dotenv()
+
 # Configure the recommended password hashing algorithm
 password_hash = PasswordHash.recommended()
 
@@ -24,15 +24,15 @@ def verify_password(password:str,hashed_password:str)->bool:
 def hash_refresh_token(token:str)->str:
      return hashlib.sha256(token.encode("utf-8")).hexdigest()
 #Load the signing secret from an environment variable
-SECRET_KEY = os.environ["JWT_SECRET_KEY"]
+SECRET_KEY = settings.JWT_SECRET_KEY
 
 #Algorithm used in sign JWTs
-Algorithm = "HS256"
+Algorithm = settings.ALGORITHM
 
 #token validity in minutes
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTE
+REFRESH_TOKEN_EXPIRE_DAYS = settings.REFRESH_TOKEN_EXPIRE_DAYS
 
 def create_access_token(user_id:int)->str:
     #Calculate when the token expires
@@ -59,7 +59,7 @@ def create_refresh_token(user_id):
         "sub":str(user_id),
         "token_type":"refresh",
         "jti":str(uuid.uuid4()),
-        "exp":datetime.now(timezone.utc) + timedelta(days=7)
+        "exp":datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     }
     token=jwt.encode(
         payload,

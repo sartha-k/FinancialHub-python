@@ -7,8 +7,9 @@ creates any missing database tables on startup, and configures CORS so the Angul
 frontend running on localhost:4200 is allowed to talk to this API.
 Run this file with uvicorn to start the server.
 """
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException,Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from routers import savingsplan,auth
 from database import  engine
 import models
@@ -38,6 +39,18 @@ app.add_exception_handler(
     RequestValidationError,
     validation_exception_handler
 )
+
+app.exception_handler(Exception)
+async def global_exception_handler(request:Request, exc:Exception):
+    logging.error(f"Unhandled exception: {exc}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error",
+                 "error_tyoe":type(exc).___name__,
+                 "reason":str(exc)
+                 }
+
+    )
 # Health-check root endpoint
 @app.get("/")
 def greet():

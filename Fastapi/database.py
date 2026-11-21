@@ -1,24 +1,23 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker, declarative_base
-import os
-from dotenv import load_dotenv
+from config import settings
 
 
-load_dotenv()
-
-# Build the MySQL connection URL
-sqlal_url = URL.create(
+database_url = URL.create(
     drivername="mysql+pymysql",
     username="root",
-    password=os.environ["MYSQL_PASSWORD"],
+    password=settings.MYSQL_PASSWORD,
     host="localhost",
-    port=3306,
-    database="fastapi_financehub"
+    port=settings.PORT,
+    database=settings.DATABASE
 )
 
+
 # Manage database connections
-engine = create_engine(sqlal_url)
+engine = create_engine(database_url)
+
+
 
 # Create database sessions
 SessionLocal = sessionmaker(

@@ -108,12 +108,18 @@ class SavingsPlanUpdate(BaseModel):
                 "HIGH risk plans must have a timeframe of atleast 12 months"
             )
         return self
+# Data accepted from the client during registration 
+class RefreshTokenRequest(BaseModel):
+    refresh_token:str
 
-# Data accepted from the client during registration
 class UserCreate(BaseModel):
         username:str = Field(min_length=3,max_length=100)
         email:EmailStr
         password:str=Field(min_length=8)
+
+class UserLogin(BaseModel):
+    email:EmailStr
+    password:str
 
 # Data returned to the client
 class UserResponse(BaseModel):
@@ -122,14 +128,9 @@ class UserResponse(BaseModel):
         email:EmailStr
         role:str
 
-class UserLogin(BaseModel):
-    email:EmailStr
-    password:str
-
 class TokenResponse(BaseModel):
     access_token:str
     refresh_token:str
     token_type:str="bearer"
 
-class RefreshTokenRequest(BaseModel):
-    refresh_token:str
+

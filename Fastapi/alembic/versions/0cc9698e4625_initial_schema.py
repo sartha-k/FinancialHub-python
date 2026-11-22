@@ -16,9 +16,11 @@ revision: str = '0cc9698e4625'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
+# Applies this database migration to the schema.
 def upgrade() -> None:
     pass
 
 
+# Reverts this database migration and restores the previous schema state.
 def downgrade() -> None:
     pass

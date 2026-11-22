@@ -9,6 +9,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Creates a database session and closes it after the request finishes.
 def get_db():
     db=SessionLocal()
 
@@ -21,6 +22,7 @@ oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl = "/api/auth/login"
 )
 
+# Decodes the bearer token and retrieves the authenticated database user.
 def get_current_user(token:str = Depends(oauth2_scheme),db:Session=Depends(get_db)):
     logger.info("The token is %s",token)
     user_id = verify_access_token(token)
@@ -32,6 +34,7 @@ def get_current_user(token:str = Depends(oauth2_scheme),db:Session=Depends(get_d
     return existing_user
 #closure function to check if the current user has one of the allowed roles
 def require_roles(allowed_roles):
+    # Rejects requests when the authenticated user lacks an allowed role.
     def check_roles(current_user:UserTable=Depends(get_current_user)):
         if current_user.role not in allowed_roles:
             raise HTTPException(status_code=403, detail="Permission Denied")

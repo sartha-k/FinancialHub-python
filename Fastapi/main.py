@@ -41,6 +41,7 @@ app.add_exception_handler(
 )
 
 app.exception_handler(Exception)
+# Logs unexpected server errors and returns a generic error response.
 async def global_exception_handler(request:Request, exc:Exception):
     logging.error(f"Unhandled exception: {exc}")
     return JSONResponse(

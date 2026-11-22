@@ -13,6 +13,7 @@ from security import SECRET_KEY, Algorithm, hash_password, hash_refresh_token,ve
 
 #Create a logger for the current python module for the purpose of logging events and errors
 logger = logging.getLogger(__name__)
+# Validates registration details and creates a new user record.
 def register_user(user:UserCreate,db:Session):
 # 1. Check whether the email already exists
     existing_user = db.query(UserTable).filter(
@@ -49,6 +50,7 @@ def register_user(user:UserCreate,db:Session):
      # 5. Return the created user
     return new_user
 
+# Stores a hashed refresh token and its expiration for a user.
 def save_refresh_token(user_id,token_hash,expire_at,db):
     new_token = RefreshTokenTable(
         user_id=user_id,
@@ -59,6 +61,7 @@ def save_refresh_token(user_id,token_hash,expire_at,db):
     db.add(new_token)
     return new_token
     
+# Authenticates a user and issues a new access/refresh token pair.
 def login_user(user:UserLogin,db:Session):
  # Find user by email
     existing_user = db.query(UserTable).filter(UserTable.email==user.email).first()
@@ -113,6 +116,7 @@ def login_user(user:UserLogin,db:Session):
     }
 
 
+# Validates a refresh token and issues a replacement token pair.
 def generate_refresh_tokens(refresh_token:str,db:Session):
     #Verify the refresh token first
     user_id = verify_refresh_token(refresh_token)
@@ -201,6 +205,7 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
 
 
     
+# Revokes a refresh token so it can no longer be reused.
 def logout_user(refresh_token:str,db:Session)->str:
     user_id = verify_refresh_token(refresh_token)
     existing_user = db.get(UserTable,user_id)

@@ -118,8 +118,8 @@ def update_savings_plan(plan:SavingsPlan,savingsPlanId:int,db:Session):
     for key, value in data.items():
         setattr(row,key,value)
 
-        db.commit()
-        db.refresh(row)
+    db.commit()
+    db.refresh(row)
     
     return row
 

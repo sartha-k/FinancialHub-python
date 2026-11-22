@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Loads and validates application configuration from environment settings.
 class Settings(BaseSettings):
     MYSQL_PASSWORD:str
     DATABASE: str

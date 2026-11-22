@@ -24,6 +24,7 @@ class SavingsPlanTable(Base):
     description=Column(String(100))
     status=Column(String(100))
 
+# Maps user records and authorization fields to the users database table.
 class UserTable(Base):
 
     __tablename__="users"
@@ -45,6 +46,7 @@ class UserTable(Base):
 
     phone_number = Column(String(15), nullable=True)
 
+# Maps refresh-token records and revocation data to the refreshtoken database table.
 class RefreshTokenTable(Base):
     __tablename__="refreshtoken"
     __table_args__ = (

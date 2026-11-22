@@ -13,14 +13,17 @@ import uuid
 password_hash = PasswordHash.recommended()
 
 logger = logging.getLogger(__name__)
+# Hashes a plain-text password for secure database storage.
 def hash_password(password:str)->str:
     # Convert plaintext password into a secure hash
     return password_hash.hash(password)
 
 
+# Checks a plain-text password against its stored hash.
 def verify_password(password:str,hashed_password:str)->bool:
     # Check whether the supplied password matches the stored hash
     return password_hash.verify(password,hashed_password)
+# Hashes a refresh token before it is stored or compared.
 def hash_refresh_token(token:str)->str:
      return hashlib.sha256(token.encode("utf-8")).hexdigest()
 #Load the signing secret from an environment variable
@@ -34,6 +37,7 @@ Algorithm = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTE
 REFRESH_TOKEN_EXPIRE_DAYS = settings.REFRESH_TOKEN_EXPIRE_DAYS
 
+# Creates a signed, short-lived access token for a user.
 def create_access_token(user_id:int)->str:
     #Calculate when the token expires
     expire = datetime.now(timezone.utc)+timedelta(
@@ -54,6 +58,7 @@ def create_access_token(user_id:int)->str:
      )
     return token
 
+# Creates a signed refresh token with an extended lifetime.
 def create_refresh_token(user_id):
     payload = {
         "sub":str(user_id),
@@ -72,6 +77,7 @@ def create_refresh_token(user_id):
     )
 
 
+# Validates an access token and returns its user ID.
 def verify_access_token(token:str)->int:
     try:
         #Verify signature and expiration,then decode claims
@@ -110,6 +116,7 @@ def verify_access_token(token:str)->int:
             headers={"WWW-Authenticate": "Bearer"}
         )
 
+# Validates a refresh token and returns its user ID.
 def verify_refresh_token(token:str):
     try:
         payload = jwt.decode(

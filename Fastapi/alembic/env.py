@@ -28,6 +28,7 @@ target_metadata = Base.metadata
 # ... etc.
 
 
+# Generates SQL migration scripts without connecting to the database.
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -52,6 +53,7 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+# Connects to the database and applies pending migrations.
 def run_migrations_online():
     with engine.connect() as connection:
         context.configure(

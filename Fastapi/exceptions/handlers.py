@@ -2,6 +2,7 @@ from fastapi import HTTPException,Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
+# Returns a consistent JSON response for HTTP exceptions.
 async def http_exception_handler(
     request:Request,
     exc:HTTPException

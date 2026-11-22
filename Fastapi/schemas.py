@@ -59,6 +59,7 @@ class SavingsPlanCreate(BaseModel):
     riskLevel: str
     description: str
     status: str
+    # Normalizes the risk level and rejects values outside LOW, MEDIUM, and HIGH.
     @field_validator("riskLevel")
     @classmethod
     def validate_risk_level(cls, value):
@@ -70,6 +71,7 @@ class SavingsPlanCreate(BaseModel):
             )
         return value
 
+    # Ensures high-risk savings plans have the required minimum timeframe.
     @model_validator(mode="after")
     def validate_high_risk_plan(self)->Self:
         value = self.riskLevel.upper()
@@ -89,6 +91,7 @@ class SavingsPlanUpdate(BaseModel):
     description:str | None = None
     status:str | None = None
 
+    # Normalizes the risk level and rejects values outside LOW, MEDIUM, and HIGH.
     @field_validator("riskLevel")
     @classmethod
     def validate_risk_level(cls, value):
@@ -100,6 +103,7 @@ class SavingsPlanUpdate(BaseModel):
             )
         return value
     
+    # Ensures high-risk savings plans have the required minimum timeframe.
     @model_validator(mode="after")
     def validate_high_risk_plan(self)->Self:
 
@@ -112,11 +116,13 @@ class SavingsPlanUpdate(BaseModel):
 class RefreshTokenRequest(BaseModel):
     refresh_token:str
 
+# Defines and validates the data required to register a user.
 class UserCreate(BaseModel):
         username:str = Field(min_length=3,max_length=100)
         email:EmailStr
         password:str=Field(min_length=8)
 
+# Defines the credentials submitted by a user when logging in.
 class UserLogin(BaseModel):
     email:EmailStr
     password:str
@@ -128,6 +134,7 @@ class UserResponse(BaseModel):
         email:EmailStr
         role:str
 
+# Defines access-token, refresh-token, and token-type values returned to clients.
 class TokenResponse(BaseModel):
     access_token:str
     refresh_token:str

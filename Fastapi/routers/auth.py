@@ -11,6 +11,7 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
+# Creates a database session and closes it after the request finishes.
 def get_db():
     db = SessionLocal()
     try:
@@ -20,14 +21,17 @@ def get_db():
         db.close()
 
 
+# Receives registration data and delegates user creation to the auth service.
 @router.post("/register",response_model=UserResponse,status_code=status.HTTP_201_CREATED)
 def register(user:UserCreate,db:Session=Depends(get_db)):
     return register_user(user,db)
 
+# Receives login credentials and delegates authentication to the auth service.
 @router.post("/login",response_model=TokenResponse)
 def login(user:UserLogin,db:Session=Depends(get_db)):
     return login_user(user,db)
 
+# Uses a refresh token to issue a new access token.
 @router.post("/refresh")
 def refresh_access_token(
     request:RefreshTokenRequest,
@@ -35,6 +39,7 @@ def refresh_access_token(
 ):
     return generate_refresh_tokens(request.refresh_token,db)
     
+# Revokes the submitted refresh token and returns logout status.
 @router.post("/logout")
 def logout(request:RefreshTokenRequest,db:Session=Depends(get_db)
            ):

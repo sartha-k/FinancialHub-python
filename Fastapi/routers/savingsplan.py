@@ -16,7 +16,10 @@ from schemas import ApiResponse, PaginatedResponse, SavingPlanDetailResponse, Sa
 from sqlalchemy.orm import Session
 from fastapi import Query
 from services import savings_plan_service
+import logging
+
 router = APIRouter(prefix="/api/savingsPlan")
+logger = logging.getLogger(__name__)
 
 
 # Yields a DB session per request and ensures it is closed after use
@@ -39,6 +42,7 @@ def get_all_savingsPlan(
     keyword:str|None = Query(default=None),
     db:Session=Depends(get_db),current_user: UserTable = Depends(get_current_user)):
 
+    logger.info("Fetching savings plans page=%s size=%s keyword=%s", page, size, keyword)
     result= savings_plan_service.get_all_savingsPlan(page,size,keyword,db)
     return {
         "success":True,
@@ -51,6 +55,7 @@ def get_all_savingsPlan(
 def get_savingsPlan_by_id(savingsPlanId:int,db:Session=Depends(get_db),current_user:UserTable=Depends(get_current_user)):
     row = savings_plan_service.get_savingsPlan_by_id(savingsPlanId,db)
     if not row:
+        logger.warning("Savings plan not found id=%s", savingsPlanId)
         raise HTTPException(status_code=404,detail="Savings plan not found")
     return {
         "success":"true",
@@ -62,12 +67,16 @@ def get_savingsPlan_by_id(savingsPlanId:int,db:Session=Depends(get_db),current_u
 @router.post("",status_code=201)
 def add_savings_plan(plan:SavingsPlanCreate,db:Session=Depends(get_db),current_user:UserTable=Depends(require_roles(["ADMIN","MANAGER"]))):
 
+    logger.info("Creating savings plan name=%s", plan.name)
     return savings_plan_service.create_savings_Plan(db,plan)
 
 # PUT /api/savingsPlan/{id} — fully replaces an existing savings plan
 @router.put("/{savingsPlanId}")
 def update_savings_plan(plan:SavingsPlan,savingsPlanId:int,db:Session=Depends(get_db)):
-    return savings_plan_service.update_savings_plan(plan,savingsPlanId,db)
+    logger.info("Updating savings plan id=%s", savingsPlanId)
+    result = savings_plan_service.update_savings_plan(plan,savingsPlanId,db)
+    logger.info("Savings plan updated id=%s", savingsPlanId)
+    return result
     
 # PATCH /api/savingsPlan/{id} — partially updates only the provided fields
 @router.patch("/{savingsPlanId}")
@@ -80,7 +89,9 @@ def patch_savings_plan(
         savingsPlanId,plan,db
     )
     if row is None:
+        logger.warning("Savings plan not found for update id=%s", savingsPlanId)
         raise HTTPException(status_code=404,detail="Savings plan not found")
+    logger.info("Savings plan patched id=%s", savingsPlanId)
     return row
 
 # DELETE /api/savingsPlan/{id} — deletes a savings plan or raises 404 if not found
@@ -88,6 +99,8 @@ def patch_savings_plan(
 def delete_savings_plan(savingsPlanId:int,db:Session=Depends(get_db),current_user:UserTable=Depends(require_roles(["ADMIN"]))):
     deleted = savings_plan_service.delete_savings_plan(savingsPlanId,db)
     if not deleted:
+        logger.warning("Savings plan not found for deletion id=%s", savingsPlanId)
         raise HTTPException(status_code=404,detail="Savings plan is not existed")
 
+    logger.info("Savings plan deleted id=%s", savingsPlanId)
     return {"details":"Savings plan deleted"}

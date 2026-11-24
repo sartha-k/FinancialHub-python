@@ -19,13 +19,10 @@ from exceptions.handlers import(
     validation_exception_handler
 )
 import logging
+from logger_config import configure_logging
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-    filename="financehub.log",
-    filemode="w"
-)
+configure_logging()
+logger = logging.getLogger(__name__)
 # FastAPI app instance
 app = FastAPI()
 # Register custom HTTP exception handler
@@ -40,18 +37,16 @@ app.add_exception_handler(
     validation_exception_handler
 )
 
-app.exception_handler(Exception)
 # Logs unexpected server errors and returns a generic error response.
 async def global_exception_handler(request:Request, exc:Exception):
-    logging.error(f"Unhandled exception: {exc}")
+    logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
     return JSONResponse(
         status_code=500,
-        content={"detail": "Internal Server Error",
-                 "error_tyoe":type(exc).___name__,
-                 "reason":str(exc)
-                 }
-
+        content={"detail": "Internal Server Error"}
     )
+
+app.add_exception_handler(Exception, global_exception_handler)
+
 # Health-check root endpoint
 @app.get("/")
 def greet():

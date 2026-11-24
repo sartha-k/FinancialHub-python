@@ -1,0 +1,6 @@
+2026-11-23 00:47:52,016 | INFO | dependencies.auth_dependency | The token is eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImV4cCI6MTc5NTM3NjIyNn0.a-fAt7xkXwR3HJlmfuPFi2cA_H2WAJTnWwXDEbf2MTc
+2026-11-23 00:47:52,017 | INFO | security | The Payload in verification is {'sub': '3', 'token_type': 'access', 'exp': 1795376226}
+2026-11-23 00:47:52,017 | INFO | security | The Header in verification is {'alg': 'HS256', 'typ': 'JWT'}
+2026-11-23 00:47:56,999 | INFO | dependencies.auth_dependency | The token is eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImV4cCI6MTc5NTM3NjIyNn0.a-fAt7xkXwR3HJlmfuPFi2cA_H2WAJTnWwXDEbf2MTc
+2026-11-23 00:47:56,999 | INFO | security | The Payload in verification is {'sub': '3', 'token_type': 'access', 'exp': 1795376226}
+2026-11-23 00:47:56,999 | INFO | security | The Header in verification is {'alg': 'HS256', 'typ': 'JWT'}

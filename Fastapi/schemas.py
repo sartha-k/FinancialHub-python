@@ -83,7 +83,7 @@ class SavingsPlanCreate(BaseModel):
 
 # Schema for partial updates; all fields optional with validation rules
 class SavingsPlanUpdate(BaseModel):
-    savingsPlanId:int | None = Field(default=None, min_length=3, max_length=100)
+    savingsPlanId:int | None = Field(default=None, min_length=1, max_length=100)
     name:str | None = None
     rateOfInterest:float | None = Field(default=None, ge=0, le=100)
     timeFrame:int |  None = Field(default=None, gt=0)

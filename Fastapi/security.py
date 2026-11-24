@@ -94,10 +94,8 @@ def verify_access_token(token:str)->int:
                 detail="Invalid token type"
             )
         #Extract the user ID from the token
-        logger.info("The Payload in verification is %s",payload)
         user_id = int(payload["sub"])
-        header = jwt.get_unverified_header(token)
-        logger.info("The Header in verification is %s",header)
+        logger.debug("Access token verified for user id=%s", user_id)
         return user_id
 
     except ExpiredSignatureError:
@@ -132,7 +130,7 @@ def verify_refresh_token(token:str):
                 detail="Invalid token type"
             )
         user_id = int(payload["sub"])
-        logger.info("The Payload in refresh token verification is %s",payload)
+        logger.debug("Refresh token verified for user id=%s", user_id)
 
         return user_id
     except ExpiredSignatureError:

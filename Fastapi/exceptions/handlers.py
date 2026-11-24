@@ -1,12 +1,16 @@
 from fastapi import HTTPException,Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Returns a consistent JSON response for HTTP exceptions.
 async def http_exception_handler(
     request:Request,
     exc:HTTPException
 ):
+    logger.warning("HTTP %s on %s %s: %s", exc.status_code, request.method, request.url.path, exc.detail)
     #Return a consistent JSON error structure
     return JSONResponse(
         status_code=exc.status_code,
@@ -23,6 +27,7 @@ async def validation_exception_handler(
     request:Request,
     exc:RequestValidationError
 ):
+    logger.warning("Request validation failed on %s %s", request.method, request.url.path)
     #Extract validation error details
     errors=exc.errors()
 

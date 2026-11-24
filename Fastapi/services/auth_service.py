@@ -2,9 +2,9 @@ from datetime import datetime, timedelta, timezone
 import time
 from fastapi import HTTPException
 import jwt
+import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from logger_config import logging
 from models import RefreshTokenTable, UserTable
 from schemas import UserCreate, UserLogin
 from security import SECRET_KEY, Algorithm, hash_password, hash_refresh_token,verify_password,create_access_token,create_refresh_token, verify_refresh_token
@@ -40,6 +40,7 @@ def register_user(user:UserCreate,db:Session):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+        logger.info("User registered successfully id=%s email=%s", new_user.id, new_user.email)
     except IntegrityError:
         db.rollback()
 
@@ -165,7 +166,7 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
               synchronize_session=False
          )
          )
-    print("Updated rows are",updated_rows)
+    logger.info("Refresh token rotation revoked rows=%s user_id=%s", updated_rows, existing_user.id)
     if updated_rows!=1:
          db.rollback()
          raise HTTPException(
@@ -207,6 +208,7 @@ def generate_refresh_tokens(refresh_token:str,db:Session):
     
 # Revokes a refresh token so it can no longer be reused.
 def logout_user(refresh_token:str,db:Session)->str:
+    logger.info("Processing refresh-token logout")
     user_id = verify_refresh_token(refresh_token)
     existing_user = db.get(UserTable,user_id)
 

@@ -25,12 +25,12 @@ def get_all_savingsPlan(
     keyword:str|None,
     db:Session):
 
-    offset = page*size
+    offset = (page-1)*size
 
     query = db.query(SavingsPlanTable)
 
     if keyword:
-        query = query.filter((SavingsPlanTable.name).ilike(f"%{keyword}"))
+        query = query.filter((SavingsPlanTable.name).ilike(f"%{keyword}%"))
 
     total_records = query.count()
 
@@ -114,13 +114,19 @@ def update_savings_plan(plan:SavingsPlan,savingsPlanId:int,db:Session):
         raise HTTPException(status_code=404,detail="Savings Plan not found")
 
     data = plan.model_dump(exclude={"savingsPlanId"})
+    try:
+        for key, value in data.items():
+            setattr(row,key,value)
 
-    for key, value in data.items():
-        setattr(row,key,value)
+        db.commit()
+        db.refresh(row)
 
-    db.commit()
-    db.refresh(row)
-    
+    except IntegrityError:
+        db.rollback()   
+        raise HTTPException(   
+            status_code=409,
+            detail="Savings Plan conflicts with an existing record"
+        )       
     return row
 
 # Partially updates only the provided fields of a savings plan; returns None if not found

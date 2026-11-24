@@ -1,26 +1,15 @@
 import logging
 
-#Get a logger specifically for financeHub
-logger = logging.getLogger("financehub")
+LOG_FILE = "financehub.log"
 
-#Allow INFO and higher-severity messages
-logger.setLevel(logging.INFO)
 
-#Create a handler that writes logs to file
-file_handler = logging.FileHandler(
-    "financehub.log",
-    mode="a",
-    encoding="utf-8"
-)
+def configure_logging() -> None:
+    """Configure application-wide logging once at startup."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        handlers=[logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")]
+    )
 
-#Configure how each log message looks
 
-formatter = logging.Formatter(
-    "%(asctime)s | %(levelname)s | %(message)s"
-)
-
-file_handler.setFormatter(formatter)
-
-#Attach the handler to our logger
-
-logger.addHandler(file_handler)
+configure_logging()

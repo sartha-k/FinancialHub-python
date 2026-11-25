@@ -1,3 +1,4 @@
+# Purpose: Manage database dependencies and authenticate/authorize API requests.
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends
 from fastapi import HTTPException

@@ -1,3 +1,4 @@
+# Purpose: Load and validate environment-based application settings.
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Loads and validates application configuration from environment settings.

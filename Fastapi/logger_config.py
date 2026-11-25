@@ -1,3 +1,4 @@
+# Purpose: Configure application-wide file logging for the FinancialHub backend.
 import logging
 
 LOG_FILE = "financehub.log"

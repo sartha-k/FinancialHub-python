@@ -1,3 +1,4 @@
+# Purpose: Convert HTTP and request-validation exceptions into standardized API responses.
 from fastapi import HTTPException,Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError

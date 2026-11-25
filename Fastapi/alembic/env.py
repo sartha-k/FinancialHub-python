@@ -1,3 +1,4 @@
+# Purpose: Configure Alembic migrations for online and offline database schema updates.
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config

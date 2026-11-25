@@ -1,3 +1,4 @@
+# Purpose: Provide password hashing and JWT access/refresh token operations.
 from pwdlib import PasswordHash
 from config import settings
 import jwt

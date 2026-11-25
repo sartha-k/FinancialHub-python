@@ -1,3 +1,4 @@
+# Purpose: Expose authentication routes for registration, login, refresh, and logout.
 from fastapi import APIRouter,Depends,status
 from sqlalchemy.orm import Session
 

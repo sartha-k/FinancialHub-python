@@ -1,3 +1,4 @@
+# Purpose: Implement user registration, authentication, token rotation, and logout operations.
 from datetime import datetime, timedelta, timezone
 import time
 from fastapi import HTTPException
